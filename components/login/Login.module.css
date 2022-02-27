@@ -1,0 +1,22 @@
+.main {
+    height          : 100vh;
+    width           : 100vw;
+    display         : flex;
+    flex-direction  : column;
+    justify-content : center;
+    align-items     : center;
+}
+
+.image {
+    width : 120px;
+}
+
+.button {
+    background-color : black;
+    color            : white;
+    margin           : 0 auto;
+}
+
+.buttonText {
+    padding-right : 10px;
+}

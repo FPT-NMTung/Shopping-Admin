@@ -1,4 +1,4 @@
-import db from './config'
+import db from '../config/database'
 
 class Product {
   static getAllProducts() {

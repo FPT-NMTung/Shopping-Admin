@@ -1,7 +1,14 @@
-function Home() {
-  return <div>
+import { useRouter } from 'next/router'
+import { useEffect } from 'react'
 
-  </div>
+function Home() {
+  const router = useRouter();
+
+  useEffect(() => {
+    router.push('/product');
+  }, [])
+
+  return <div></div>
 }
 
 export default Home
