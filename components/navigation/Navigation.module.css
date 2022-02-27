@@ -1,9 +1,10 @@
 .image {
     text-align : center;
+    margin-top : 10px;
 }
 
 .image img {
-    width : 120px;
+    width : 100px;
 }
 
 .nav ul {
@@ -18,12 +19,12 @@
 }
 
 .nav a {
-    color      : black;
+    color : black;
 }
 
 .copyright {
     text-align : center;
-    font-size  : 12px;
+    font-size  : 10px;
 }
 
 .signOut {
