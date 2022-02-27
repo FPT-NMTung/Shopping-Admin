@@ -1,9 +1,20 @@
 import classes from './Navigation.module.css';
 import Link from 'next/link';
+import { Fragment } from 'react'
+import { Button } from '@nextui-org/react'
+import { Lock } from 'react-iconly'
+import { useRouter } from 'next/router'
 
 const Navigation = () => {
+  const router = useRouter()
+
+  const handlerSignOutClick = () => {
+    localStorage.removeItem('token');
+    router.push('/login')
+  }
+
   return (
-    <div>
+    <Fragment>
       <div className={classes.image}>
         <img src="https://res.cloudinary.com/dvuqazqqs/image/upload/v1644473486/ICON11_pzxxoj.png" alt=""/>
       </div>
@@ -17,10 +28,13 @@ const Navigation = () => {
           </li>
         </ul>
       </div>
-      <div className={classes.copyright}>
-        <p>Created by NMTung & team&apos;s project 💖</p>
+      <div>
+        <Button onClick={handlerSignOutClick} className={classes.signOut} color={"black"} auto><Lock set="bold" primaryColor="white"/></Button>
+        <div className={classes.copyright}>
+          <p>Created by NMTung 💖</p>
+        </div>
       </div>
-    </div>
+    </Fragment>
   )
 }
 

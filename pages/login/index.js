@@ -8,7 +8,7 @@ const LoginPage = () => {
   useEffect(() => {
     const token = localStorage.getItem('token')
     if (token) {
-      router.push('/')
+      router.push('/product')
     }
   }, [])
 

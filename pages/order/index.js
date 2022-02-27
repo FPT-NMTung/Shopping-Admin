@@ -6,22 +6,18 @@ import { Fragment, useEffect, useState } from 'react'
 const OrderPage = () => {
   const router = useRouter()
 
-  const [isCheck, setIsCheck] = useState(false)
-
   useEffect(() => {
     const token = localStorage.getItem('token')
     if (!token) {
       router.push('/login')
-    } else {
-      setIsCheck(true)
     }
   }, [])
 
   return (
     <Fragment>
-      {isCheck && <MainLayout>
+      <MainLayout>
         <Order/>
-      </MainLayout>}
+      </MainLayout>
     </Fragment>
   )
 }

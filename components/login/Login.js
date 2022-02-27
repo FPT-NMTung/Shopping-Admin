@@ -52,7 +52,9 @@ const Login = () => {
           }
         })
         .catch((error) => {
-          console.log(error)
+          setValidUsername(false)
+          setValidPassword(false)
+          setIsLoading(false)
         })
     }
   }

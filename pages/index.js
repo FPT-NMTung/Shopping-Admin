@@ -5,7 +5,11 @@ function Home() {
   const router = useRouter();
 
   useEffect(() => {
-    router.push('/product');
+    if (localStorage.getItem('token')) {
+      router.push('/product')
+    } else {
+      router.push('/login')
+    }
   }, [])
 
   return <div></div>
