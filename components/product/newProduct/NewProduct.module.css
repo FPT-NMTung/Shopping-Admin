@@ -1,10 +1,9 @@
-.main {
-    height : 500px;
-}
-
-.control {
+.createFrom {
     display        : flex;
     flex-direction : row;
     column-gap     : 20px;
-    margin-top     : 20px;
+}
+
+.buttonForm {
+    margin : 0 auto;
 }

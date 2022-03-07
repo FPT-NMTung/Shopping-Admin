@@ -14,11 +14,14 @@
     "@nextui-org/react": "^1.0.2-beta.4",
     "axios": "^0.26.0",
     "bcrypt": "^5.0.1",
+    "cloudinary": "^1.28.1",
     "jsonwebtoken": "^8.5.1",
     "mysql2": "^2.3.3",
     "next": "12.1.0",
     "react": "17.0.2",
+    "react-avatar-editor": "^12.0.0",
     "react-dom": "17.0.2",
+    "react-dropzone": "^12.0.4",
     "react-iconly": "^2.2.5"
   },
   "devDependencies": {

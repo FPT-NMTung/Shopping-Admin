@@ -1,9 +1,13 @@
 import Contain from '../layout/Contain'
-import { useEffect, useState } from 'react'
+import { Fragment, useEffect, useRef, useState } from 'react'
 import axios from 'axios'
 import { DataGrid } from '@mui/x-data-grid'
 
 import classes from './Product.module.css'
+import { Button, Input, Spacer } from '@nextui-org/react'
+import AvatarEditor from 'react-avatar-editor'
+import Dropzone from 'react-dropzone'
+import NewProduct from './newProduct/NewProduct'
 
 const column = [
   {
@@ -14,7 +18,7 @@ const column = [
   {
     field: 'name',
     headerName: 'NAME',
-    width: 350,
+    width: 320,
   },
   {
     field: 'price',
@@ -45,12 +49,11 @@ const column = [
     headerName: 'IMAGE',
     width: 150,
     renderCell: (rowData) => {
-      console.log(rowData)
       return (
         <img
           src={rowData.value}
           alt={rowData.name}
-          style={{ width: '100px', height: '100px', objectFit: 'cover' }}
+          style={{width: '100px', height: '100px', objectFit: 'cover'}}
         />
       )
     },
@@ -69,37 +72,60 @@ const column = [
 
 const Product = () => {
   const [listProduct, setListProduct] = useState([])
+  const [selectedProduct, setSelectedProduct] = useState([])
 
-  useEffect(() => {
+  const [isOpenCreateProduct, setIsOpenCreateProduct] = useState(false)
+
+  const loadDataGrid = () => {
     axios.get('/api/product')
       .then(res => {
         setListProduct(res.data.data)
-        console.log(res.data.data)
       })
+    setIsOpenCreateProduct(false)
+  }
+
+  useEffect(() => {
+    loadDataGrid()
   }, [])
 
+  const handleOpenAddNewProduct = () => {
+    setIsOpenCreateProduct(!isOpenCreateProduct)
+  }
+
   return (
-    <Contain>
-      <div className={classes.main}>
-        <DataGrid
-          rows={listProduct.map(item => ({
-            id: item.id,
-            name: item.name,
-            price: `$${item.price}`,
-            discount: `${item.discount}%`,
-            createdAt: (new Date(item.createdAt)).toLocaleString('vi-VN'),
-            updatedAt: (new Date(item.updatedAt)).toLocaleString('vi-VN'),
-            quantity: item.quantity,
-            quantitySold: item.quantitySold,
-            image: item.image,
-          }))}
-          columns={column}
-          pageSize={25}
-          checkboxSelection
-          getRowHeight={() => 100}
-        />
-      </div>
-    </Contain>
+    <Fragment>
+      <Contain>
+        <div className={classes.main}>
+          <DataGrid
+            rows={listProduct.map(item => ({
+              id: item.id,
+              name: item.name,
+              price: `$${item.price}`,
+              discount: `${item.discount}%`,
+              createdAt: (new Date(item.createdAt)).toLocaleString('vi-VN'),
+              updatedAt: (new Date(item.updatedAt)).toLocaleString('vi-VN'),
+              quantity: item.quantity,
+              quantitySold: item.quantitySold,
+              image: item.image,
+            }))}
+            columns={column}
+            pageSize={25}
+            checkboxSelection
+            getRowHeight={() => 100}
+            onSelectionModelChange={(e) => {
+              setSelectedProduct(e)
+            }}
+          />
+        </div>
+        <div className={classes.control}>
+          <Button auto disabled={selectedProduct.length === 0} color={'error'}>Delete product selected</Button>
+          <Button auto onClick={handleOpenAddNewProduct}>Add new product</Button>
+        </div>
+      </Contain>
+      {isOpenCreateProduct && <Contain>
+        <NewProduct onCreateSuccess={loadDataGrid}/>
+      </Contain>}
+    </Fragment>
   )
 }
 
