@@ -2,8 +2,8 @@ import Contain from '../layout/Contain'
 import { Fragment, useEffect, useState } from 'react'
 import axios from 'axios'
 import { DataGrid } from '@mui/x-data-grid'
-import { ToastContainer, toast } from 'react-toastify';
-import 'react-toastify/dist/ReactToastify.css';
+import { ToastContainer, toast } from 'react-toastify'
+import 'react-toastify/dist/ReactToastify.css'
 import classes from './Product.module.css'
 import { Button } from '@nextui-org/react'
 import NewProduct from './newProduct/NewProduct'
@@ -74,6 +74,8 @@ const Product = () => {
   const [selectedProduct, setSelectedProduct] = useState([])
 
   const [isOpenCreateProduct, setIsOpenCreateProduct] = useState(false)
+  const [isOpenUpdateProduct, setIsOpenUpdateProduct] = useState(false)
+  const [buttonUpdateEnable, setButtonUpdateEnable] = useState(false)
 
   const loadDataGrid = () => {
     axios.get('/api/product', {
@@ -96,12 +98,13 @@ const Product = () => {
 
   const handleOpenAddNewProduct = () => {
     setIsOpenCreateProduct(!isOpenCreateProduct)
+    setIsOpenUpdateProduct(false)
   }
 
   const handleDeleteProduct = (id) => {
-    toast.info("Deleting product...")
+    toast.info('Deleting product...')
     axios.post('/api/product/delete', {
-      ids: selectedProduct
+      ids: selectedProduct,
     }, {
       headers: {
         Authorization: `Bearer ${localStorage.getItem('token')}`,
@@ -109,10 +112,10 @@ const Product = () => {
     })
       .then(res => {
         loadDataGrid()
-        toast.success("Delete product successfully")
+        toast.success('Delete product successfully')
       })
       .catch(err => {
-        toast.error("Delete product failed")
+        toast.error('Delete product failed')
       })
   }
 
@@ -149,16 +152,29 @@ const Product = () => {
             getRowHeight={() => 100}
             onSelectionModelChange={(e) => {
               setSelectedProduct(e)
+              setButtonUpdateEnable(e.length === 1)
+              setIsOpenUpdateProduct(false)
             }}
           />
         </div>
         <div className={classes.control}>
-          <Button auto onClick={handleDeleteProduct} disabled={selectedProduct.length === 0} color={'error'}>Delete product selected</Button>
           <Button auto onClick={handleOpenAddNewProduct}>Add new product</Button>
+          {selectedProduct.length !== 0 &&
+            <Button auto onClick={handleDeleteProduct} disabled={false} color={'error'}>Delete product
+              selected</Button>}
+          {selectedProduct.length === 1 && <Button color={'secondary'} auto onClick={() => {
+            setIsOpenUpdateProduct(!isOpenUpdateProduct)
+            setIsOpenCreateProduct(false)
+          }}>Update product</Button>}
         </div>
       </Contain>
       {isOpenCreateProduct && <Contain>
-        <NewProduct onCreateSuccess={loadDataGrid}/>
+        <NewProduct isUpdate={false} onCreateSuccess={loadDataGrid}/>
+      </Contain>}
+      {isOpenUpdateProduct && <Contain>
+        <NewProduct data={
+          listProduct.find(item => item.id === selectedProduct[0])
+        } isUpdate={true} onCreateSuccess={loadDataGrid}/>
       </Contain>}
     </Fragment>
   )

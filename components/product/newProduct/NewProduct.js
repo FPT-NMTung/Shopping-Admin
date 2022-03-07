@@ -1,4 +1,4 @@
-import { Fragment, useRef, useState } from 'react'
+import { Fragment, useEffect, useRef, useState } from 'react'
 import classes from './NewProduct.module.css'
 import Dropzone from 'react-dropzone'
 import AvatarEditor from 'react-avatar-editor'
@@ -8,7 +8,9 @@ import axios from 'axios'
 import { toast, ToastContainer } from 'react-toastify'
 
 const NewProduct = ({
-                      onCreateSuccess
+                      onCreateSuccess,
+                      isUpdate,
+                      data,
                     }) => {
   const [file, setFile] = useState('')
   const [scaleImage, setScaleImage] = useState(0)
@@ -27,6 +29,15 @@ const NewProduct = ({
   const refDiscount = useRef()
   const refDescription = useRef()
 
+  useEffect(() => {
+    if (isUpdate) {
+      refName.current.value = data.name
+      refPrice.current.value = data.price
+      refDiscount.current.value = data.discount
+      refDescription.current.value = data.description
+    }
+  }, [])
+
   const handleCreateProduct = () => {
     const image = refAvatar.current.getImageScaledToCanvas().toDataURL()
     const name = refName.current.value
@@ -41,15 +52,31 @@ const NewProduct = ({
       setValidDescription(!!description)
       return
     }
-
+    toast.info(isUpdate ? 'Updating product...' : 'Creating product...')
     setLoading(true)
-    axios.post('/api/product/create', {
-      image,
-      name,
-      price,
-      discount,
-      description,
-    }, {
+    let uri = ''
+    let dataReq
+    if (!isUpdate) {
+      uri = `/api/product/create`
+      dataReq = {
+        image,
+        name,
+        price,
+        discount,
+        description,
+      }
+    } else {
+      uri = `/api/product/update`
+      dataReq = {
+        id: data.id,
+        image,
+        name,
+        price,
+        discount,
+        description,
+      }
+    }
+    axios.post(uri, dataReq, {
       headers: {
         Authorization: `Bearer ${localStorage.getItem('token')}`,
       },
@@ -64,10 +91,10 @@ const NewProduct = ({
         refDiscount.current.value = ''
         refDescription.current.value = ''
         onCreateSuccess()
-        toast.success("Create product success")
+        toast.success(isUpdate ? 'Update product success' : 'Create product success')
       })
       .catch(() => {
-        toast.error('Create product failed')
+        toast.error(isUpdate ? 'Update product failed' : 'Create product failed')
         setLoading(false)
       })
   }
@@ -108,6 +135,7 @@ const NewProduct = ({
       draggable
       pauseOnHover
     />
+    <h3>{isUpdate ? 'Update' : 'Create'}</h3>
     <div className={classes.createFrom}>
       <div>
         <Dropzone
