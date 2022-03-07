@@ -1,12 +1,11 @@
 import Contain from '../layout/Contain'
-import { Fragment, useEffect, useRef, useState } from 'react'
+import { Fragment, useEffect, useState } from 'react'
 import axios from 'axios'
 import { DataGrid } from '@mui/x-data-grid'
-
+import { ToastContainer, toast } from 'react-toastify';
+import 'react-toastify/dist/ReactToastify.css';
 import classes from './Product.module.css'
-import { Button, Input, Spacer } from '@nextui-org/react'
-import AvatarEditor from 'react-avatar-editor'
-import Dropzone from 'react-dropzone'
+import { Button } from '@nextui-org/react'
 import NewProduct from './newProduct/NewProduct'
 
 const column = [
@@ -77,9 +76,16 @@ const Product = () => {
   const [isOpenCreateProduct, setIsOpenCreateProduct] = useState(false)
 
   const loadDataGrid = () => {
-    axios.get('/api/product')
+    axios.get('/api/product', {
+      headers: {
+        Authorization: `Bearer ${localStorage.getItem('token')}`,
+      },
+    })
       .then(res => {
         setListProduct(res.data.data)
+      })
+      .catch(err => {
+        toast.error('Load data failed')
       })
     setIsOpenCreateProduct(false)
   }
@@ -92,9 +98,38 @@ const Product = () => {
     setIsOpenCreateProduct(!isOpenCreateProduct)
   }
 
+  const handleDeleteProduct = (id) => {
+    toast.info("Deleting product...")
+    axios.post('/api/product/delete', {
+      ids: selectedProduct
+    }, {
+      headers: {
+        Authorization: `Bearer ${localStorage.getItem('token')}`,
+      },
+    })
+      .then(res => {
+        loadDataGrid()
+        toast.success("Delete product successfully")
+      })
+      .catch(err => {
+        toast.error("Delete product failed")
+      })
+  }
+
   return (
     <Fragment>
       <Contain>
+        <ToastContainer
+          position="top-right"
+          autoClose={5000}
+          hideProgressBar={false}
+          newestOnTop={false}
+          closeOnClick
+          rtl={false}
+          pauseOnFocusLoss
+          draggable
+          pauseOnHover
+        />
         <div className={classes.main}>
           <DataGrid
             rows={listProduct.map(item => ({
@@ -118,7 +153,7 @@ const Product = () => {
           />
         </div>
         <div className={classes.control}>
-          <Button auto disabled={selectedProduct.length === 0} color={'error'}>Delete product selected</Button>
+          <Button auto onClick={handleDeleteProduct} disabled={selectedProduct.length === 0} color={'error'}>Delete product selected</Button>
           <Button auto onClick={handleOpenAddNewProduct}>Add new product</Button>
         </div>
       </Contain>

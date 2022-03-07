@@ -5,6 +5,7 @@ import AvatarEditor from 'react-avatar-editor'
 import { Button, Input, Spacer } from '@nextui-org/react'
 import { Slider } from '@mui/material'
 import axios from 'axios'
+import { toast, ToastContainer } from 'react-toastify'
 
 const NewProduct = ({
                       onCreateSuccess
@@ -48,6 +49,10 @@ const NewProduct = ({
       price,
       discount,
       description,
+    }, {
+      headers: {
+        Authorization: `Bearer ${localStorage.getItem('token')}`,
+      },
     })
       .then(() => {
         setLoading(false)
@@ -59,9 +64,10 @@ const NewProduct = ({
         refDiscount.current.value = ''
         refDescription.current.value = ''
         onCreateSuccess()
+        toast.success("Create product success")
       })
       .catch(() => {
-        alert('Error creating product, please contact NMTung')
+        toast.error('Create product failed')
         setLoading(false)
       })
   }
@@ -91,6 +97,17 @@ const NewProduct = ({
   }
 
   return <Fragment>
+    <ToastContainer
+      position="top-right"
+      autoClose={5000}
+      hideProgressBar={false}
+      newestOnTop={false}
+      closeOnClick
+      rtl={false}
+      pauseOnFocusLoss
+      draggable
+      pauseOnHover
+    />
     <div className={classes.createFrom}>
       <div>
         <Dropzone

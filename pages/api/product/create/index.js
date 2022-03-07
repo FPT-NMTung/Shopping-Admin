@@ -1,7 +1,11 @@
 import Product from '../../../../model/product'
 import cloudinary from '../../../../config/cloudinary'
+import isAuthenticated from '../../../../config/authRouter'
 
 const handler = async (req, res) => {
+  if (!isAuthenticated(req, res)) {
+    return res.status(401).send({ error: 'Unauthorized' })
+  }
   if (req.method === 'POST') {
     const {
       name,

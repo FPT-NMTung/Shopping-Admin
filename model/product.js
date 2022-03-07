@@ -18,6 +18,10 @@ class Product {
     return db.execute('update product set name = ?, description = ?, image = ?, price = ?, discount = ? where id = ?',
       [name, description, image, price, discount, id])
   }
+
+  static deleteProduct(ids) {
+    return db.execute(`delete from product where id in (${ids})`)
+  }
 }
 
 export default Product
