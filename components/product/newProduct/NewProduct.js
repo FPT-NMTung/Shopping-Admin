@@ -21,12 +21,14 @@ const NewProduct = ({
   const [validName, setValidName] = useState(true)
   const [validPrice, setValidPrice] = useState(true)
   const [validDiscount, setValidDiscount] = useState(true)
+  const [validQuantity, setValidQuantity] = useState(true)
   const [validDescription, setValidDescription] = useState(true)
 
   const refAvatar = useRef()
   const refName = useRef()
   const refPrice = useRef()
   const refDiscount = useRef()
+  const refQuantity = useRef()
   const refDescription = useRef()
 
   useEffect(() => {
@@ -34,6 +36,7 @@ const NewProduct = ({
       refName.current.value = data.name
       refPrice.current.value = data.price
       refDiscount.current.value = data.discount
+      refQuantity.current.value = data.quantity
       refDescription.current.value = data.description
     }
   }, [])
@@ -43,12 +46,14 @@ const NewProduct = ({
     const name = refName.current.value
     const price = refPrice.current.value
     const discount = refDiscount.current.value
+    const quantity = refQuantity.current.value
     const description = refDescription.current.value
 
-    if (!name || !price || !discount || !description) {
+    if (!name || !price || !discount || !description || !quantity) {
       setValidName(!!name)
       setValidPrice(!!price)
       setValidDiscount(!!discount)
+      setValidQuantity(!!quantity)
       setValidDescription(!!description)
       return
     }
@@ -63,6 +68,7 @@ const NewProduct = ({
         name,
         price,
         discount,
+        quantity,
         description,
       }
     } else {
@@ -73,6 +79,7 @@ const NewProduct = ({
         name,
         price,
         discount,
+        quantity,
         description,
       }
     }
@@ -89,6 +96,7 @@ const NewProduct = ({
         refName.current.value = ''
         refPrice.current.value = ''
         refDiscount.current.value = ''
+        refQuantity.current.value = ''
         refDescription.current.value = ''
         onCreateSuccess()
         toast.success(isUpdate ? 'Update product success' : 'Create product success')
@@ -107,11 +115,13 @@ const NewProduct = ({
     refName.current.value = ''
     refPrice.current.value = ''
     refDiscount.current.value = ''
+    refQuantity.current.value = ''
     refDescription.current.value = ''
 
     setValidName(true)
     setValidPrice(true)
     setValidDiscount(true)
+    setValidQuantity(true)
     setValidDescription(true)
   }
 
@@ -185,6 +195,15 @@ const NewProduct = ({
           label={'Discount'}
           type={'number'}
           onChange={() => setValidDiscount(true)}
+        />
+        <Spacer/>
+        <Input
+          status={validQuantity ? 'default' : 'error'}
+          ref={refQuantity}
+          width={450}
+          label={'Quantity'}
+          type={'number'}
+          onChange={() => setValidDescription(true)}
         />
         <Spacer/>
         <Input.Textarea

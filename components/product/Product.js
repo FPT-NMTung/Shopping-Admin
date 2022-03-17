@@ -72,6 +72,7 @@ const column = [
 const Product = () => {
   const [listProduct, setListProduct] = useState([])
   const [selectedProduct, setSelectedProduct] = useState([])
+  const [pageSize, setPageSize] = useState(25)
 
   const [isOpenCreateProduct, setIsOpenCreateProduct] = useState(false)
   const [isOpenUpdateProduct, setIsOpenUpdateProduct] = useState(false)
@@ -147,7 +148,8 @@ const Product = () => {
               image: item.image,
             }))}
             columns={column}
-            pageSize={25}
+            pageSize={pageSize}
+            onPageSizeChange={(e) => setPageSize(e)}
             checkboxSelection
             getRowHeight={() => 100}
             onSelectionModelChange={(e) => {

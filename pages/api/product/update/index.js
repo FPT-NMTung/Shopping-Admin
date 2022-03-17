@@ -7,10 +7,10 @@ const handler = async (req, res) => {
     return res.status(401).send({error: 'Unauthorized'})
   }
   if (req.method === 'POST') {
-    const {id, name, price, description, image, discount} = req.body
+    const {id, name, price, description, image, discount, quantity} = req.body
 
     const urlImage = (await cloudinary.v2.uploader.upload(image)).secure_url
-    await Product.updateProduct(id, name, description, urlImage, price, discount)
+    await Product.updateProduct(id, name, description, urlImage, price, discount, quantity)
 
     return res.status(200).send({message: 'Product updated'})
   }

@@ -12,12 +12,13 @@ const handler = async (req, res) => {
       description,
       price,
       image,
+      quantity,
       discount,
     } = req.body
 
     const urlImage = (await cloudinary.v2.uploader.upload(image)).secure_url
 
-    const data = await Product.insertProduct(name, description, urlImage, price, discount)
+    const data = await Product.insertProduct(name, description, urlImage, price, discount, quantity)
     res.status(200).json({
       status: 'success',
       data,

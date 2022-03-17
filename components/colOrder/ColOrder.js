@@ -1,4 +1,4 @@
-import { Fragment } from 'react'
+import { Fragment, useState } from 'react'
 import classes from './ColOrder.module.css'
 import { DataGrid } from '@mui/x-data-grid'
 
@@ -41,13 +41,16 @@ const column = [
 ]
 
 const ColOrder = (props) => {
+  const [pageSize, setPageSize] = useState(25)
+
   return (
     <Fragment>
       <h3 className={classes.title}>{props.title}</h3>
       <DataGrid
         rows={props.dataTable}
         columns={column}
-        pageSize={25}
+        pageSize={pageSize}
+        onPageSizeChange={(e) => setPageSize(e)}
         checkboxSelection
         getRowHeight={() => 200}
         onSelectionModelChange={(e) => {
