@@ -26,6 +26,10 @@ class Order {
       'where status = ?\n' +
       'order by order_history.updatedAt desc ', [status])
   }
+
+  static updateStatus(ids, status) {
+    return db.execute(`update order_history set status = ${status} where id in (${ids})`)
+  }
 }
 
 export default Order
