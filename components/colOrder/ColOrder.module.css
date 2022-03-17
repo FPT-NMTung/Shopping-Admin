@@ -2,3 +2,24 @@
     margin     : 0;
     text-align : center;
 }
+
+.cellName {
+    display : flex;
+}
+
+.cellName p {
+    font-size : 10px;
+}
+
+.cellName img {
+    border : 1px solid #ccc;
+    margin : 10px 10px 10px 0;
+}
+
+.nameOrder {
+    margin    : 0;
+}
+
+.information {
+    font-size : 10px;
+}
